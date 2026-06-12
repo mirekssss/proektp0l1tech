@@ -1,0 +1,40 @@
+# Build directories
+build/
+**/build/
+
+# Qt generated files
+**/*_autogen/
+*.user
+
+# Compiled objects
+*.o
+*.obj
+*.exe
+*.dll
+*.a
+
+# CMake cache
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+install_manifest.txt
+CTestTestfile.cmake
+
+# Doxygen output
+docs/doxygen/
+
+# SQLite database
+*.db
+*.sqlite
+
+# IDE files
+.vscode/
+.idea/
+*.suo
+*.sln
+*.vcxproj*
+
+# OS files
+.DS_Store
+Thumbs.db

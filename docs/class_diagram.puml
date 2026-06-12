@@ -1,0 +1,87 @@
+@startuml class_diagram
+
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+
+' ══════════════════════════════════════════
+'  BACKEND SERVER
+' ══════════════════════════════════════════
+package "backend_server" {
+
+    class MyTcpServer {
+        - m_server   : QTcpServer*
+        - m_clients  : QList<QTcpSocket*>
+        - m_buffers  : QHash<QTcpSocket*, QByteArray>
+        --
+        + MyTcpServer(port : quint16 = 33333)
+        - onNewConnection() : void
+        - onReadyRead() : void
+        - onClientDisconnected() : void
+        - sendResponse(client, data) : void
+    }
+
+    class Functions <<utility>> {
+        + handleVigenereEncrypt(payload : QString) : QString
+        + handleVigenereDecrypt(payload : QString) : QString
+        + handleSHA512(payload : QString) : QString
+        + handleBisect(payload : QString) : QString
+        + handleShortest(payload : QString) : QString
+    }
+
+    class Graph <<struct>> {
+        - adj : QHash<int, QVector<int>>
+        --
+        + addEdge(u : int, v : int) : void
+        + shortestPath(s : int, t : int) : int
+        - hasPathWithin(s, t, limit) : bool
+    }
+
+    MyTcpServer ..> Functions : <<uses>>
+    Functions    ..> Graph    : <<uses>>
+}
+
+' ══════════════════════════════════════════
+'  FRONTEND CLIENT
+' ══════════════════════════════════════════
+package "frontend_client" {
+
+    class TcpClient <<singleton>> {
+        - {static} inst : TcpClient
+        - m_socket : QTcpSocket*
+        --
+        + {static} instance() : TcpClient&
+        + connectToServer(host, port) : bool
+        + disconnectFromServer() : void
+        + isConnected() : bool
+        + sendCommand(cmd : QString) : QString
+        --
+        ~ connectionChanged(connected : bool)
+    }
+
+    class MainWindow {
+        - m_connectButton  : QPushButton*
+        - m_statusLabel    : QLabel*
+        - m_vigTextEdit    : QLineEdit*
+        - m_vigKeyEdit     : QLineEdit*
+        - m_shaInputEdit   : QLineEdit*
+        - m_bisectInputEdit: QLineEdit*
+        - m_graphSEdit     : QLineEdit*
+        - m_graphTEdit     : QLineEdit*
+        - m_historyTable   : QTableWidget*
+        --
+        + MainWindow(parent : QWidget*)
+        - setupUI() : void
+        - addHistoryRow(op, input, result) : void
+        - onConnectClicked() : void
+        - onVigenereEncryptClicked() : void
+        - onVigenereDecryptClicked() : void
+        - onSHA512Clicked() : void
+        - onBisectClicked() : void
+        - onGraphClicked() : void
+        - onConnectionChanged(connected : bool) : void
+    }
+
+    MainWindow ..> TcpClient : <<uses>>
+}
+
+@enduml

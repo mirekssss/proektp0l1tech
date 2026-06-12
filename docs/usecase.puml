@@ -1,0 +1,38 @@
+@startuml usecase
+
+left to right direction
+skinparam actorStyle awesome
+
+actor "Пользователь" as User
+
+rectangle "Система (клиент + сервер)" {
+    usecase "Подключиться к серверу"            as UC_Connect
+    usecase "Зашифровать текст (Виженер)"       as UC_Enc
+    usecase "Расшифровать текст (Виженер)"      as UC_Dec
+    usecase "Вычислить SHA-512 хэш"             as UC_Hash
+    usecase "Вычислить sqrt\n(метод деления пополам)" as UC_Sqrt
+    usecase "Найти кратчайший путь в графе"     as UC_Graph
+    usecase "Просмотреть историю запросов"      as UC_History
+}
+
+User --> UC_Connect
+User --> UC_Enc
+User --> UC_Dec
+User --> UC_Hash
+User --> UC_Sqrt
+User --> UC_Graph
+User --> UC_History
+
+UC_Enc    ..> UC_Connect : <<include>>
+UC_Dec    ..> UC_Connect : <<include>>
+UC_Hash   ..> UC_Connect : <<include>>
+UC_Sqrt   ..> UC_Connect : <<include>>
+UC_Graph  ..> UC_Connect : <<include>>
+
+UC_Enc    ..> UC_History : <<extend>>
+UC_Dec    ..> UC_History : <<extend>>
+UC_Hash   ..> UC_History : <<extend>>
+UC_Sqrt   ..> UC_History : <<extend>>
+UC_Graph  ..> UC_History : <<extend>>
+
+@enduml
